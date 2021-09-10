@@ -67,7 +67,8 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
                 continue;
             }
             DIR * newDir = opendir(newPath);
-            return getFileSizeFromDir(newDir, buckets, newPath);
+            buckets = getFileSizeFromDir(newDir, buckets, newPath);
+            continue;
         }
 
 
