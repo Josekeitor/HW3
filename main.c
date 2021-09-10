@@ -3,7 +3,55 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <time.h>
 #define CHUNK 50;
+
+
+void arrayPrint(int *);
+
+
+void arrayPrint(int * data){
+    int * end = data + 4;
+    int total;
+
+    for (int * aux = data; aux < end; ++aux) {
+        total = total + *aux;
+    }
+    float per1 = (*data/(float)total) * 100;
+    float per2 = (*(data+1)/(float)total) * 100;
+    float per3 = (*(data+2)/(float)total) * 100;
+    float per4 = (*(data+3)/(float)total) * 100;
+
+
+    printf("Urna        Numero de Archivos       Histograma\n");
+    printf("0-1023      ");
+    printf("%d\t                     ", *data);
+    for (int i = 0; i <(int)per1; i++){
+        printf("%c",'*');
+    }
+    printf("\n");
+
+    printf("1024-2047   ");
+    printf("%d\t                     ", *(data+1));
+    for (int i = 0; i <(int)per2; i++){
+        printf("%c",'*');
+    }
+    printf("\n");
+
+    printf("2048-3071   ");
+    printf("%d\t                     ", *(data+2));
+    for (int i = 0; i <(int)per3; i++){
+        printf("%c",'*');
+    }
+    printf("\n");
+
+    printf("3072-4095   ");
+    printf("%d\t                     ", *(data+3));
+    for (int i = 0; i <(int)per4; i++){
+        printf("%c",'*');
+    }
+
+}
 
 int isDirectory(const char *path) {
     struct stat statbuf;
@@ -106,9 +154,7 @@ int main() {
     if((dir = opendir(dirname)) != NULL) {
         buckets = getFileSizeFromDir(dir, buckets, dirname);
     }
-    for(int i = 0; i < 4; i++){
-        printf("%d", *(buckets+i));
-    }
+    arrayPrint(buckets);
     free(buckets);
     free(dirname);
     return 0;
