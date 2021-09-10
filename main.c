@@ -120,7 +120,7 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
 
 
         size_t res = getFileSize(newPath);
-
+        free(newPath);
         if(res < 1024) {
             *(buckets) += 1;
         } else if (res < 2048) {
@@ -130,7 +130,7 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
         } else {
             *(buckets + 3) += 1;
         }
-        free(newPath);
+
     }
     closedir(dir);
 
