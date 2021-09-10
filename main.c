@@ -14,9 +14,7 @@ int isDirectory(const char *path) {
 
 size_t getFileSize(const char* filename) {
     struct stat file_stat;
-    if(stat(filename, &file_stat) != 0) {
-        return 0;
-    }
+    stat(filename, &file_stat);
     return file_stat.st_size;
 }
 
@@ -72,8 +70,8 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
         }
 
 
-        free(newPath);
-        size_t res = getFileSize(entry->d_name);
+
+        size_t res = getFileSize(newPath);
 
         if(res < 1024) {
             *(buckets) += 1;
@@ -81,9 +79,10 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
             *(buckets + 1) += 1;
         } else if (res < 3072) {
             *(buckets +2) += 1;
-        } else if (res < 4096) {
+        } else {
             *(buckets + 3) += 1;
         }
+        free(newPath);
     }
     closedir(dir);
 
