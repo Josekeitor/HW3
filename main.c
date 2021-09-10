@@ -54,16 +54,16 @@ int * getFileSizeFromDir(DIR * dir, int* buckets, char* dirname) {
     struct dirent * entry;
 
     while ( (entry = readdir(dir)) != NULL) {
+        if ((strcmp(entry->d_name, ".") == 0) || (strcmp(entry->d_name, "..") == 0 )) {
+            continue;
+        }
         char * newPath = (char*) malloc(2*sizeof(dirname));
         strcpy(newPath, dirname);
         strcat(newPath, "/");
         strcat(newPath, entry->d_name);
 
+
         if(isDirectory(newPath)){
-            if(entry->d_namlen < 3){
-                free(newPath);
-                continue;
-            }
             DIR * newDir = opendir(newPath);
             buckets = getFileSizeFromDir(newDir, buckets, newPath);
             continue;
